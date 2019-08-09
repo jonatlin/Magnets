@@ -1,6 +1,8 @@
 package com.libgdx.magnets.entities;
 
-public class GameObject {
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+public class GameObject extends Actor {
 
     protected float x;
     protected float y;

@@ -1,20 +1,37 @@
 package com.libgdx.magnets.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.libgdx.magnets.Constants;
 import com.libgdx.magnets.MagnetsGame;
 
-public class MagnetMan extends GameObject {
+public class MagnetMan extends Actor {
+
+    Texture texture;
+    Sprite sprite;
+
 
     public MagnetMan() {
 
+        sprite = new Sprite(new Texture(Gdx.files.internal("magnet_small.png")));
+        sprite.setPosition(Constants.GAME_WIDTH/2f,Constants.GAME_HEIGHT/2f);
+
+//        texture = new Texture(Gdx.files.internal("test.png"));
 
     }
 
-    public void draw(ShapeRenderer sr) {
-        sr.setColor(1, 1, 1, 1);
-        sr.begin(ShapeRenderer.ShapeType.Line);
-        sr.circle(20,20,2);
-        sr.end();
+    @Override
+    public void draw(Batch batch,float parentAlpha) {
+
+        System.out.println("asdf");
+
+        sprite.draw(batch);
+
+
     }
 
 }
