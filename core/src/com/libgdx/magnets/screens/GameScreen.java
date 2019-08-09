@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.libgdx.magnets.MagnetsGame;
+import com.libgdx.magnets.entities.Magnet;
 import com.libgdx.magnets.entities.MagnetMan;
 
 public class GameScreen implements Screen {
@@ -21,6 +22,8 @@ public class GameScreen implements Screen {
 
 //    private final World world;
     private MagnetMan magnetMan;
+    private Magnet magnet;
+
     private Image image;
 
     public GameScreen(final MagnetsGame game) {
@@ -38,6 +41,9 @@ public class GameScreen implements Screen {
 
 //        stage.addActor(image);
         stage.addActor(magnetMan);
+        stage.addActor(magnet);
+
+        stage.setKeyboardFocus(magnetMan);
 
 //        world = new World(0, true);
 
@@ -103,5 +109,6 @@ public class GameScreen implements Screen {
 
     public void initObjects() {
         magnetMan = new MagnetMan();
+        magnet = new Magnet();
     }
 }
