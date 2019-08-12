@@ -39,9 +39,14 @@ public class MagnetsGame extends Game {
 		viewport.apply();
 
 
+
+
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
+
+		batch.setProjectionMatrix(camera.combined);
+
 
 		/*WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
