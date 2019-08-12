@@ -16,10 +16,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.libgdx.magnets.Constants;
 import com.libgdx.magnets.MagnetsGame;
 import com.libgdx.magnets.entities.Magnet;
 import com.libgdx.magnets.entities.MagnetMan;
 import com.libgdx.magnets.entities.Test;
+import com.libgdx.magnets.entities.Wall;
 
 public class GameScreen implements Screen {
 
@@ -36,7 +38,15 @@ public class GameScreen implements Screen {
 //    private B2WorldCreator creator;
 
     private Test test;
-    private Sprite s;
+    private Test test2;
+    private Wall north,east,south,west;
+
+    // character speed
+    private int v_x = 0;
+    private int v_y = 0;
+
+    // input pressed
+    private boolean pressed;
 
     public GameScreen(final MagnetsGame game) {
 
@@ -50,7 +60,14 @@ public class GameScreen implements Screen {
 
 //        BodyDef bdef = new BodyDef();
 
-        test = new Test(world);
+        test = new Test(world, 20,20);
+        test2 = new Test(world,40,40);
+
+        // map boundaries
+        north = new Wall(world, 1,20,20,20);
+//        east = new Wall(world, 15,1,20,62);
+        south = new Wall(world, 1,1,64,1);
+        west = new Wall(world, 1,1,1,63);
 //        s = new Sprite((new Texture(Gdx.files.internal("MagnetMan.png"))));
 
       /*  Texture splash = new Texture(Gdx.files.internal("battle-arena-background.png"));
@@ -79,18 +96,51 @@ public class GameScreen implements Screen {
     }
 
     public void update(float delta) {
-
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && test.b2body.getLinearVelocity().x <= 2)//
-            test.b2body.applyLinearImpulse(new Vector2(2f, 0), test.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && test.b2body.getLinearVelocity().x >= -2)
+       /* if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && test.b2body.getLinearVelocity().x <= 2)//
+//            test.b2body.setLinearVelocity(15,0);
+                        test.b2body.applyLinearImpulse(new Vector2(2f, 0), test.b2body.getWorldCenter(), true);
+        else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && test.b2body.getLinearVelocity().x >= -2)
             test.b2body.applyLinearImpulse(new Vector2(-2f, 0), test.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) && test.b2body.getLinearVelocity().x <= 2)
+        else if (Gdx.input.isKeyPressed(Input.Keys.UP) && test.b2body.getLinearVelocity().x <= 2)
             test.b2body.applyLinearImpulse(new Vector2(0, 2f), test.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && test.b2body.getLinearVelocity().x >= -2)
+        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && test.b2body.getLinearVelocity().x >= -2)
             test.b2body.applyLinearImpulse(new Vector2(0, -2f), test.b2body.getWorldCenter(), true);
+        else
+            test.b2body.setLinearVelocity(0,0);*/
 
-        world.step(1/60f,6,2);
+       pressed = false;
+
+
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+//            test.b2body.setLinearVelocity(30, test.b2body.getLinearVelocity().y);
+            v_x += 30;
+            pressed = true;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+//            test.b2body.setLinearVelocity(-30, test.b2body.getLinearVelocity().y);
+            v_x -= 30;
+            pressed = true;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+//            test.b2body.setLinearVelocity(test.b2body.getLinearVelocity().x, 30);
+            v_y += 30;
+            pressed = true;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+//            test.b2body.setLinearVelocity(test.b2body.getLinearVelocity().x, -30);
+            v_y -= 30;
+            pressed = true;
+        }
+        if(!pressed)
+            test.b2body.setLinearVelocity(0,0);
+        test.b2body.setLinearVelocity(v_x, v_y);
+        v_x =0;
+        v_y=0;
+
+        world.step(1/60f,1,1);
         test.update(delta);
+        test2.update(delta);
+//        east.update(delta);
     }
 
     @Override
@@ -108,12 +158,15 @@ public class GameScreen implements Screen {
 //        GAME.font.draw(GAME.batch, "Welcome to Drop!!! ", 100, 150);
 //        GAME.font.draw(GAME.batch, "Tap anywhere to begin!", 100, 100);
 
-        debugRenderer.render(world, GAME.camera.combined);
 
         GAME.batch.begin();
 //        test.draw(GAME.batch);
         test.draw(GAME.batch);
+        test2.draw(GAME.batch);
         GAME.batch.end();
+
+        debugRenderer.render(world, GAME.camera.combined);
+
 
 //        stage.act(delta);
 //
