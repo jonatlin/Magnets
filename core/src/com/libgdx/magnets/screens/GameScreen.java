@@ -1,17 +1,12 @@
 package com.libgdx.magnets.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,7 +16,7 @@ import com.libgdx.magnets.MagnetsGame;
 import com.libgdx.magnets.entities.Magnet;
 import com.libgdx.magnets.entities.MagnetMan;
 import com.libgdx.magnets.entities.Test;
-import com.libgdx.magnets.entities.Wall;
+import com.libgdx.magnets.entities.WallBody;
 
 public class GameScreen implements Screen {
 
@@ -39,7 +34,10 @@ public class GameScreen implements Screen {
 
     private Test test;
     private Test test2;
-    private Wall north,east,south,west;
+    private WallBody northWallBody,eastWallBody,southWallBody,westWallBody;
+
+    private Sprite outerWallSprite;
+    private Sprite northWallSprite, southWallSprite, eastWallSprite, westWallSprite;
 
     // character speed
     private int v_x = 0;
@@ -64,10 +62,34 @@ public class GameScreen implements Screen {
         test2 = new Test(world,40,40);
 
         // map boundaries
-        north = new Wall(world, 1,20,20,20);
-//        east = new Wall(world, 15,1,20,62);
-        south = new Wall(world, 1,1,64,1);
-        west = new Wall(world, 1,1,1,63);
+        northWallBody = new WallBody(world, 1,63,63,63);
+        eastWallBody = new WallBody(world, 63,1,63,63);
+        southWallBody = new WallBody(world, 1,1,63,1);
+        westWallBody = new WallBody(world, 1,1,1,63);
+
+        // outer wall sprite
+        outerWallSprite = new Sprite((new Texture(Gdx.files.internal("outer_walls2.png"))));
+        outerWallSprite.setPosition(0,0);
+
+        // wall sprites
+       /* northWallSprite = new Sprite((new Texture(Gdx.files.internal("wall.png"))));
+        northWallSprite.setPosition(0, 64);
+        northWallSprite.setOrigin(0, 0);
+        northWallSprite.rotate(270);
+
+        eastWallSprite = new Sprite((new Texture(Gdx.files.internal("wall.png"))));
+        eastWallSprite.setPosition(Constants.GAME_WIDTH-1, 0);
+
+
+        southWallSprite = new Sprite((new Texture(Gdx.files.internal("wall.png"))));
+        southWallSprite.setPosition(0, 10);
+        southWallSprite.setOrigin(0,0);
+        southWallSprite.rotate(270);
+
+        westWallSprite = new Sprite((new Texture(Gdx.files.internal("wall.png"))));
+        westWallSprite.setPosition(0, 0);*/
+
+
 //        s = new Sprite((new Texture(Gdx.files.internal("MagnetMan.png"))));
 
       /*  Texture splash = new Texture(Gdx.files.internal("battle-arena-background.png"));
@@ -140,7 +162,7 @@ public class GameScreen implements Screen {
         world.step(1/60f,1,1);
         test.update(delta);
         test2.update(delta);
-//        east.update(delta);
+//        eastWallBody.update(delta);
     }
 
     @Override
@@ -155,28 +177,22 @@ public class GameScreen implements Screen {
 
 //        GAME.batch.setProjectionMatrix(GAME.camera.combined);
 
-//        GAME.font.draw(GAME.batch, "Welcome to Drop!!! ", 100, 150);
-//        GAME.font.draw(GAME.batch, "Tap anywhere to begin!", 100, 100);
+
 
 
         GAME.batch.begin();
-//        test.draw(GAME.batch);
+
+        outerWallSprite.draw(GAME.batch);
         test.draw(GAME.batch);
         test2.draw(GAME.batch);
+        GAME.font.draw(GAME.batch, "10 ", Constants.GAME_WIDTH/2f, Constants.GAME_HEIGHT *4/5f);
         GAME.batch.end();
 
         debugRenderer.render(world, GAME.camera.combined);
 
-
 //        stage.act(delta);
 //
 //        stage.draw();
-
-       /* GAME.batch.begin();
-        GAME.batch.end();*/
-
-
-//        magnetMan.draw( GAME.shapeRenderer);e
 
 
     }

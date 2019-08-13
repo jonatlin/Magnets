@@ -43,6 +43,7 @@ public class MagnetsGame extends Game {
 
 		batch = new SpriteBatch();
 		font = new BitmapFont();
+		font.getData().setScale(0.3f,0.3f);
 		shapeRenderer = new ShapeRenderer();
 
 		batch.setProjectionMatrix(camera.combined);

@@ -59,9 +59,9 @@ public class Test extends Sprite {
     }*/
 
     public void update(float dt) {
-        System.out.println(getX() + ", " + getY());
-//        System.out.println(b2body.getPosition().x + ", " + b2body.getPosition().y );
-//        System.out.println(Math.round(b2body.getPosition().x - getWidth() / 2) + ", " + Math.round(b2body.getPosition().y - getHeight() / 2));
+        System.out.println("Sprite position: " + getX() + ", " + getY());
+        System.out.println("box2d body position" + b2body.getPosition().x + ", " + b2body.getPosition().y );
+        System.out.println(Math.round(b2body.getPosition().x - getWidth() / 2) + ", " + Math.round(b2body.getPosition().y - getHeight() / 2));
         setPosition(Math.round(b2body.getPosition().x - getWidth() / 2) , Math.round(b2body.getPosition().y - getHeight() / 2));
     }
 

@@ -1,5 +1,7 @@
 package com.libgdx.magnets.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -10,22 +12,22 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Wall extends Sprite {
+public class WallBody {
 
-    public int characterWidth = 64;
+    public int characterWidth = 1;
     public int characterHeight = 64;
 
     public Body b2body;
     public World world;
 
-    EdgeShape wall;
+    private EdgeShape wall;
 
-    public Wall(World world, int x1, int y1, int x2, int y2) {
+    public WallBody(World world, int x1, int y1, int x2, int y2) {
 
         this.world = world;
 
         BodyDef bdef = new BodyDef();
-        bdef.position.set(x1, y1);
+        bdef.position.set(0, 0);
 
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body = world.createBody(bdef);
@@ -36,10 +38,10 @@ public class Wall extends Sprite {
         wall.set(x1, y1, x2, y2);
 
         fdef.shape = wall;
+        fdef.friction = 1;
         b2body.createFixture(fdef);
 
-        setBounds(x1, y1, characterWidth, characterHeight);
-
+//        setBounds((x1 + x2)/2f, (y1+y2)/2f, characterWidth, characterHeight);
 
     }
 
