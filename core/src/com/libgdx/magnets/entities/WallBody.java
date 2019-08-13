@@ -43,6 +43,9 @@ public class WallBody {
 
 //        setBounds((x1 + x2)/2f, (y1+y2)/2f, characterWidth, characterHeight);
 
+
+
+
     }
 
     public void update(float dt) {

@@ -51,7 +51,7 @@ public class Test extends Sprite {
 
 //        b2body.createFixture(fdef).setUserData(this);
 
-        setBounds(pos_x,pos_y,characterWidth,characterHeight);
+        setBounds(Math.round(b2body.getPosition().x - getWidth() / 2),Math.round(b2body.getPosition().y - getHeight() / 2),characterWidth,characterHeight);
     }
 
     /*public TextureRegion getFrame(float dt) {

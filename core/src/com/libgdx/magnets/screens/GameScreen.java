@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -25,15 +26,18 @@ public class GameScreen implements Screen {
 
 //    private final World world;
     private MagnetMan magnetMan;
-    private Magnet magnet;
     private Image image;
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
 //    private B2WorldCreator creator;
 
+    private GlyphLayout timeLayout;
+
+
     private Test test;
     private Test test2;
+    private Magnet magnet1, magnet2, magnet3;
     private WallBody northWallBody,eastWallBody,southWallBody,westWallBody;
 
     private Sprite outerWallSprite;
@@ -58,8 +62,6 @@ public class GameScreen implements Screen {
 
 //        BodyDef bdef = new BodyDef();
 
-        test = new Test(world, 20,20);
-        test2 = new Test(world,40,40);
 
         // map boundaries
         northWallBody = new WallBody(world, 1,63,63,63);
@@ -70,6 +72,18 @@ public class GameScreen implements Screen {
         // outer wall sprite
         outerWallSprite = new Sprite((new Texture(Gdx.files.internal("outer_walls2.png"))));
         outerWallSprite.setPosition(0,0);
+
+        // Main character
+        test = new Test(world, 20,20);
+//        test2 = new Test(world,60,20);
+
+        // Magnets
+        magnet1 = new Magnet(world, 40,40);
+
+        // font
+        timeLayout = new GlyphLayout(GAME.font, "time");
+
+
 
         // wall sprites
        /* northWallSprite = new Sprite((new Texture(Gdx.files.internal("wall.png"))));
@@ -96,7 +110,6 @@ public class GameScreen implements Screen {
         image = new Image(splash);
         image.setPosition(0,0);
 
-        initObjects();
 
 
 //        stage.addActor(image);
@@ -159,9 +172,10 @@ public class GameScreen implements Screen {
         v_x =0;
         v_y=0;
 
+
         world.step(1/60f,1,1);
         test.update(delta);
-        test2.update(delta);
+
 //        eastWallBody.update(delta);
     }
 
@@ -179,14 +193,23 @@ public class GameScreen implements Screen {
 
 
 
-
+        // draw objects
         GAME.batch.begin();
 
         outerWallSprite.draw(GAME.batch);
         test.draw(GAME.batch);
-        test2.draw(GAME.batch);
-        GAME.font.draw(GAME.batch, "10 ", Constants.GAME_WIDTH/2f, Constants.GAME_HEIGHT *4/5f);
+//        test2.draw(GAME.batch);
+
+
+        magnet1.draw(GAME.batch);
+
+//        timeLayout.width = 3;
+
+//        GAME.font.draw(GAME.batch, timeLayout, Gdx.graphics.getWidth()/2f - timeLayout.width/2f, Gdx.graphics.getHeight() - timeLayout.height - 1);
+//        GAME.font.draw(GAME.batch, timeLayout, 20, 20);
+
         GAME.batch.end();
+
 
         debugRenderer.render(world, GAME.camera.combined);
 
@@ -201,6 +224,7 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
 //        stage.getViewport().update(width, height, false);
         GAME.viewport.update(width, height, false);
+        GAME.camera.update();
     }
 
     @Override
@@ -226,8 +250,4 @@ public class GameScreen implements Screen {
 
     }
 
-    public void initObjects() {
-        magnetMan = new MagnetMan();
-        magnet = new Magnet();
-    }
 }

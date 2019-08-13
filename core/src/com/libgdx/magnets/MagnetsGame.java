@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,7 +23,7 @@ public class MagnetsGame extends Game {
 	// resource generators
 	public SpriteBatch batch;
 	public BitmapFont font;
-	public ShapeRenderer shapeRenderer;
+//	public ShapeRenderer shapeRenderer;
 
 	// camera
 	public OrthographicCamera camera;
@@ -42,9 +43,18 @@ public class MagnetsGame extends Game {
 
 
 		batch = new SpriteBatch();
+
+		// font
+		/*FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
+		BitmapFont font15 = generator.generateFont(15);
+		BitmapFont font22 = generator.generateFont(22);
+		generator.dispose();*/
+
 		font = new BitmapFont();
-		font.getData().setScale(0.3f,0.3f);
-		shapeRenderer = new ShapeRenderer();
+		font.getData().setScale(.5f,.5f);
+//		shapeRenderer = new ShapeRenderer();
+
+
 
 		batch.setProjectionMatrix(camera.combined);
 
@@ -77,7 +87,7 @@ public class MagnetsGame extends Game {
 		super.dispose();
 
 		batch.dispose();
-		shapeRenderer.dispose();
+//		shapeRenderer.dispose();
 		font.dispose();
 
 		/*batch.dispose();
