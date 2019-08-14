@@ -24,7 +24,7 @@ public class Robot extends Sprite {
 
     public Robot(World world, int pos_x, int pos_y) {
 
-        super((new Texture(Gdx.files.internal("robot.png"))));
+        super((new Texture(Gdx.files.internal("robot_blue.png"))));
         // for set texture manually
 //        setRegion(new Texture(Gdx.files.internal("MagnetMan.png")));
 

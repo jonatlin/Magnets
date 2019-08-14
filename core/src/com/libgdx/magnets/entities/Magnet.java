@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Magnet extends Sprite {
 
     public enum State {
-        REPEL, ATTRACT, OFF;
+        REPEL, ATTRACT, OFF
     }
 
     public int characterWidth = 4;
@@ -27,9 +27,9 @@ public class Magnet extends Sprite {
     // pos_x, pos_y bottom left corner of sprite
     public Magnet(World world, int pos_x, int pos_y) {
 
-        super((new Texture(Gdx.files.internal("magnet_small.png"))));
-        // for set texture manually
-//        setRegion(new Texture(Gdx.files.internal("MagnetMan.png")));
+        // set sprite based on state
+        super((new Texture(Gdx.files.internal("magnet_off.png"))));
+        state = State.OFF;
 
         this.world = world;
 
@@ -49,12 +49,21 @@ public class Magnet extends Sprite {
 
         setBounds(Math.round(b2body.getPosition().x - getWidth() / 2),Math.round(b2body.getPosition().y - getHeight() / 2),characterWidth,characterHeight);
 
-        state = State.OFF;
 
     }
 
     public void setState(State state) {
         this.state = state;
+        updateSprite();
+    }
+
+    public void updateSprite() {
+        if(state == State.ATTRACT)
+            setRegion(new Texture(Gdx.files.internal("magnet_attract.png")));
+        if(state == State.REPEL)
+            setRegion(new Texture(Gdx.files.internal("magnet_repel.png")));
+        if(state == State.OFF)
+            setRegion(new Texture(Gdx.files.internal("magnet_off.png")));
     }
 
     public State getState() {
@@ -63,13 +72,13 @@ public class Magnet extends Sprite {
 
     public void cycleState() {
         if(this.state == State.OFF) {
-            this.state = State.ATTRACT;
+            setState(State.ATTRACT);
         }
         else if(this.state == State.ATTRACT) {
-            this.state = State.REPEL;
+            setState(State.REPEL);
         }
         else if(this.state == State.REPEL) {
-            this.state = State.OFF;
+            setState(State.OFF);
         }
     }
 
