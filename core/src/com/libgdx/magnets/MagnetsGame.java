@@ -50,8 +50,8 @@ public class MagnetsGame extends Game {
 		BitmapFont font22 = generator.generateFont(22);
 		generator.dispose();*/
 
-		font = new BitmapFont();
-		font.getData().setScale(.5f,.5f);
+		font = new BitmapFont(Gdx.files.internal("fonts/small_px.fnt"));
+		font.getData().setScale(1f,1f);
 //		shapeRenderer = new ShapeRenderer();
 
 

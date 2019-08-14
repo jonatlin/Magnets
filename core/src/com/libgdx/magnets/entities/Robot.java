@@ -14,17 +14,17 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Test extends Sprite {
+public class Robot extends Sprite {
 
-    public int characterWidth = 4;
-    public int characterHeight = 4;
+    public int characterWidth = 5;
+    public int characterHeight = 5;
 
     public Body b2body;
     public World world;
 
-    public Test(World world, int pos_x, int pos_y) {
+    public Robot(World world, int pos_x, int pos_y) {
 
-        super((new Texture(Gdx.files.internal("MagnetMan.png"))));
+        super((new Texture(Gdx.files.internal("robot.png"))));
         // for set texture manually
 //        setRegion(new Texture(Gdx.files.internal("MagnetMan.png")));
 
@@ -46,8 +46,7 @@ public class Test extends Sprite {
 
         fdef.shape = bodyShape;
         b2body.createFixture(fdef);
-
-//        b2body.setLinearDamping(3f);
+        b2body.setLinearDamping(10f);
 
 //        b2body.createFixture(fdef).setUserData(this);
 
@@ -59,9 +58,9 @@ public class Test extends Sprite {
     }*/
 
     public void update(float dt) {
-        System.out.println("Sprite position: " + getX() + ", " + getY());
-        System.out.println("box2d body position" + b2body.getPosition().x + ", " + b2body.getPosition().y );
-        System.out.println(Math.round(b2body.getPosition().x - getWidth() / 2) + ", " + Math.round(b2body.getPosition().y - getHeight() / 2));
+//        System.out.println("Sprite position: " + getX() + ", " + getY());
+//        System.out.println("box2d body position" + b2body.getPosition().x + ", " + b2body.getPosition().y );
+//        System.out.println(Math.round(b2body.getPosition().x - getWidth() / 2) + ", " + Math.round(b2body.getPosition().y - getHeight() / 2));
         setPosition(Math.round(b2body.getPosition().x - getWidth() / 2) , Math.round(b2body.getPosition().y - getHeight() / 2));
     }
 

@@ -11,11 +11,18 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Magnet extends Sprite {
 
+    public enum State {
+        REPEL, ATTRACT, OFF;
+    }
+
     public int characterWidth = 4;
     public int characterHeight = 4;
 
     public Body b2body;
     public World world;
+
+    public State state;
+
 
     // pos_x, pos_y bottom left corner of sprite
     public Magnet(World world, int pos_x, int pos_y) {
@@ -40,11 +47,32 @@ public class Magnet extends Sprite {
         fdef.shape = bodyShape;
         b2body.createFixture(fdef);
 
-//        b2body.setLinearDamping(3f);
-
-//        b2body.createFixture(fdef).setUserData(this);
-
         setBounds(Math.round(b2body.getPosition().x - getWidth() / 2),Math.round(b2body.getPosition().y - getHeight() / 2),characterWidth,characterHeight);
+
+        state = State.OFF;
+
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public State getState() {
+        return this.state;
+    }
+
+    public void cycleState() {
+        if(this.state == State.OFF) {
+            this.state = State.ATTRACT;
+        }
+        else if(this.state == State.ATTRACT) {
+            this.state = State.REPEL;
+        }
+        else if(this.state == State.REPEL) {
+            this.state = State.OFF;
+        }
     }
 
 }
+
+
