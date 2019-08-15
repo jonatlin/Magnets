@@ -12,11 +12,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.libgdx.magnets.Constants;
+import com.libgdx.magnets.MagneticForceManager;
 import com.libgdx.magnets.MagnetsGame;
 import com.libgdx.magnets.entities.Magnet;
-import com.libgdx.magnets.entities.MagnetMan;
 import com.libgdx.magnets.entities.Robot;
 import com.libgdx.magnets.entities.WallBody;
 
@@ -35,6 +34,8 @@ public class GameScreen implements Screen {
     private Magnet magnet1, magnet2, magnet3;
     private WallBody northWallBody,eastWallBody,southWallBody,westWallBody;
 
+    private MagneticForceManager magneticForceManager;
+
     private Sprite outerWallSprite;
     private Sprite northWallSprite, southWallSprite, eastWallSprite, westWallSprite;
 
@@ -48,9 +49,9 @@ public class GameScreen implements Screen {
     public GameScreen(final MagnetsGame game) {
 
         this.GAME = game;
-        /*this.stage = new Stage(GAME.viewport, GAME.batch);
+        this.stage = new Stage(GAME.viewport, GAME.batch);
         Gdx.input.setInputProcessor(stage);
-*/
+
         world = new World(new Vector2(0, 0), true);
 
         debugRenderer = new Box2DDebugRenderer();
@@ -70,6 +71,12 @@ public class GameScreen implements Screen {
 
         // Magnets
         magnet1 = new Magnet(world, 40,40);
+        magnet2 = new Magnet(world, 10,10);
+
+        magneticForceManager = new MagneticForceManager();
+        magneticForceManager.addRobot(robot);
+        magneticForceManager.addMagnet(magnet1);
+        magneticForceManager.addMagnet(magnet2);
 
         // font
         timeLayout = new GlyphLayout(GAME.font, "100");
@@ -171,18 +178,20 @@ public class GameScreen implements Screen {
         v_y=0;
 
         // detect mouse click
-
-        // USE input processor
-        // https://github.com/libgdx/libgdx/wiki/Event-handling
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            magnet1.cycleState();
-            System.out.println(magnet1.getState());
+//            Gdx.input.getX();
+//            magnet1.cycleState();
+//            magnet2.cycleState();
+            System.out.println(GAME.viewport.getScaling());
+
+            Vector2 pointClicked = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(),Gdx.input.getY()));
+            
+//            magneticForceManager.updateMagnetState(Gdx.input.getX(), Gdx.input.getY());
+            magneticForceManager.updateMagnetState(pointClicked.x, pointClicked.y);
+
         }
 
-            // attract
-//        robot.b2body.applyLinearImpulse(new Vector2(magnet1.getX() - robot.getX(), magnet1.getY() - robot.getY()), robot.b2body.getWorldCenter(), true);
-
-        double distance = Math.sqrt( Math.pow(robot.getX() - magnet1.getX() , 2) + Math.pow((robot.getY() - magnet1.getY()),2));
+        /*double distance = Math.sqrt( Math.pow(robot.getX() - magnet1.getX() , 2) + Math.pow((robot.getY() - magnet1.getY()),2));
         Vector2 repelVector = new Vector2(robot.getX() - magnet1.getX(), robot.getY() - magnet1.getY());
         Vector2 attractVector = new Vector2(magnet1.getX() - robot.getX(), magnet1.getY() - robot.getY());
         float scale = 12 * (float)(1/Math.pow(distance, 1.75));
@@ -191,16 +200,13 @@ public class GameScreen implements Screen {
         if(magnet1.getState() == Magnet.State.REPEL)
             robot.b2body.applyLinearImpulse(repelVector.scl(scale), robot.b2body.getWorldCenter(), true);
         if(magnet1.getState() == Magnet.State.ATTRACT)
-            robot.b2body.applyLinearImpulse(attractVector.scl(scale), robot.b2body.getWorldCenter(), true);
+            robot.b2body.applyLinearImpulse(attractVector.scl(scale), robot.b2body.getWorldCenter(), true);*/
 
-
-//        System.out.println(scale);
-//        System.out.println(robot.b2body.getWorldCenter());
 
         world.step(1/60f,1,1);
         robot.update(delta);
+        magneticForceManager.act();
 
-//        eastWallBody.update(delta);
     }
 
     @Override
@@ -224,6 +230,7 @@ public class GameScreen implements Screen {
         robot.draw(GAME.batch);
 
         magnet1.draw(GAME.batch);
+        magnet2.draw(GAME.batch);
 
 //        timeLayout.width = 3;
 

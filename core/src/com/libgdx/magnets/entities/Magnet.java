@@ -29,7 +29,9 @@ public class Magnet extends Sprite {
 
         // set sprite based on state
         super((new Texture(Gdx.files.internal("magnet_off.png"))));
-        state = State.OFF;
+
+        setState(State.OFF);
+//        state = State.OFF;
 
         this.world = world;
 
