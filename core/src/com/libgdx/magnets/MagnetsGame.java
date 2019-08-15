@@ -12,18 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.libgdx.magnets.Stages.MainMenuStage;
 import com.libgdx.magnets.screens.GameScreen;
+import com.libgdx.magnets.screens.MainMenuScreen;
 
 public class MagnetsGame extends Game {
-
-	// dimensions
-	public static int WIDTH;
-	public static int HEIGHT;
 
 	// resource generators
 	public SpriteBatch batch;
 	public BitmapFont font;
-//	public ShapeRenderer shapeRenderer;
 
 	// camera
 	public OrthographicCamera camera;
@@ -44,34 +41,16 @@ public class MagnetsGame extends Game {
 
 		batch = new SpriteBatch();
 
-		// font
-		/*FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
-		BitmapFont font15 = generator.generateFont(15);
-		BitmapFont font22 = generator.generateFont(22);
-		generator.dispose();*/
 
 		font = new BitmapFont(Gdx.files.internal("fonts/small_px.fnt"));
 		font.getData().setScale(1f,1f);
-//		shapeRenderer = new ShapeRenderer();
-
 
 
 		batch.setProjectionMatrix(camera.combined);
 
+//		setScreen(new GameScreen(this));
 
-		/*WIDTH = Gdx.graphics.getWidth();
-		HEIGHT = Gdx.graphics.getHeight();
-
-		WIDTH = 64;
-		HEIGHT = 64;*/
-
-//		System.out.println(WIDTH + String.valueOf(HEIGHT));
-
-//		camera.setToOrtho(false, WIDTH, HEIGHT);
-//		camera.update();
-
-
-		setScreen(new GameScreen(this));
+		setScreen(new MainMenuScreen(this));
 
 	}
 

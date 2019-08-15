@@ -3,7 +3,6 @@ package com.libgdx.magnets.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -12,10 +11,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.libgdx.magnets.Constants;
-import com.libgdx.magnets.MagneticForceManager;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
+import com.libgdx.magnets.GameManager;
+import com.libgdx.magnets.Stages.HudStage;
 import com.libgdx.magnets.MagnetsGame;
 import com.libgdx.magnets.entities.Magnet;
+import com.libgdx.magnets.entities.Power;
 import com.libgdx.magnets.entities.Robot;
 import com.libgdx.magnets.entities.WallBody;
 
@@ -32,9 +34,13 @@ public class GameScreen implements Screen {
 
     private Robot robot;
     private Magnet magnet1, magnet2, magnet3;
+    private Power power;
+
     private WallBody northWallBody,eastWallBody,southWallBody,westWallBody;
 
-    private MagneticForceManager magneticForceManager;
+    private GameManager gameManager;
+
+    private HudStage hudStage;
 
     private Sprite outerWallSprite;
     private Sprite northWallSprite, southWallSprite, eastWallSprite, westWallSprite;
@@ -46,6 +52,11 @@ public class GameScreen implements Screen {
     // input pressed
     private boolean pressed;
 
+    // timer
+    Timer timer;
+    TimeUtils a;
+
+
     public GameScreen(final MagnetsGame game) {
 
         this.GAME = game;
@@ -56,16 +67,12 @@ public class GameScreen implements Screen {
 
         debugRenderer = new Box2DDebugRenderer();
 
-        // map boundaries
-        northWallBody = new WallBody(world, 1,63,63,63);
-        eastWallBody = new WallBody(world, 63,1,63,63);
-        southWallBody = new WallBody(world, 1,1,63,1);
-        westWallBody = new WallBody(world, 1,1,1,63);
+
 
         // outer wall sprite
         outerWallSprite = new Sprite((new Texture(Gdx.files.internal("outer_walls2.png"))));
         outerWallSprite.setPosition(0,0);
-
+/*
         // Main character
         robot = new Robot(world, 30,30);
 
@@ -73,54 +80,21 @@ public class GameScreen implements Screen {
         magnet1 = new Magnet(world, 40,40);
         magnet2 = new Magnet(world, 10,10);
 
-        magneticForceManager = new MagneticForceManager();
-        magneticForceManager.addRobot(robot);
-        magneticForceManager.addMagnet(magnet1);
-        magneticForceManager.addMagnet(magnet2);
+        // Power
+        power = new Power(20,40);*/
 
-        // font
-        timeLayout = new GlyphLayout(GAME.font, "100");
-        GAME.font.setColor(Color.RED);
-        scoreLayout = new GlyphLayout(GAME.font, "024");
-//        System.out.println(scoreLayout.height);
+        gameManager = new GameManager();
+        /*gameManager.addRobot(robot);
+        gameManager.addMagnet(magnet1);
+        gameManager.addMagnet(magnet2);
+        gameManager.addPower(power);*/
 
+        hudStage = new HudStage(game.batch, GAME.font, 60);
+        gameManager.setHudStage(hudStage);
+        gameManager.setWorld(world);
 
-
-        // wall sprites
-       /* northWallSprite = new Sprite((new Texture(Gdx.files.internal("wall.png"))));
-        northWallSprite.setPosition(0, 64);
-        northWallSprite.setOrigin(0, 0);
-        northWallSprite.rotate(270);
-
-        eastWallSprite = new Sprite((new Texture(Gdx.files.internal("wall.png"))));
-        eastWallSprite.setPosition(Constants.GAME_WIDTH-1, 0);
-
-
-        southWallSprite = new Sprite((new Texture(Gdx.files.internal("wall.png"))));
-        southWallSprite.setPosition(0, 10);
-        southWallSprite.setOrigin(0,0);
-        southWallSprite.rotate(270);
-
-        westWallSprite = new Sprite((new Texture(Gdx.files.internal("wall.png"))));
-        westWallSprite.setPosition(0, 0);*/
-
-
-//        s = new Sprite((new Texture(Gdx.files.internal("MagnetMan.png"))));
-
-      /*  Texture splash = new Texture(Gdx.files.internal("battle-arena-background.png"));
-        image = new Image(splash);
-        image.setPosition(0,0);
-
-
-
-//        stage.addActor(image);
-        stage.addActor(magnetMan);
-        stage.addActor(magnet);
-
-        stage.setKeyboardFocus(magnetMan);*/
-
-//        world = new World(0, true);
-
+        gameManager.generateWalls();
+        gameManager.generateNewLevel();
 
 
 
@@ -132,62 +106,41 @@ public class GameScreen implements Screen {
     }
 
     public void update(float delta) {
-       /* if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && robot.b2body.getLinearVelocity().x <= 2)//
-//            robot.b2body.setLinearVelocity(15,0);
-                        robot.b2body.applyLinearImpulse(new Vector2(2f, 0), robot.b2body.getWorldCenter(), true);
-        else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && robot.b2body.getLinearVelocity().x >= -2)
-            robot.b2body.applyLinearImpulse(new Vector2(-2f, 0), robot.b2body.getWorldCenter(), true);
-        else if (Gdx.input.isKeyPressed(Input.Keys.UP) && robot.b2body.getLinearVelocity().x <= 2)
-            robot.b2body.applyLinearImpulse(new Vector2(0, 2f), robot.b2body.getWorldCenter(), true);
-        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && robot.b2body.getLinearVelocity().x >= -2)
-            robot.b2body.applyLinearImpulse(new Vector2(0, -2f), robot.b2body.getWorldCenter(), true);
-        else
-            robot.b2body.setLinearVelocity(0,0);*/
        pressed = false;
 
 //        key press movement
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-//            robot.b2body.setLinearVelocity(30, robot.b2body.getLinearVelocity().y);
             v_x += 30;
             pressed = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-//            robot.b2body.setLinearVelocity(-30, robot.b2body.getLinearVelocity().y);
             v_x -= 30;
             pressed = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-//            robot.b2body.setLinearVelocity(robot.b2body.getLinearVelocity().x, 30);
             v_y += 30;
             pressed = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-//            robot.b2body.setLinearVelocity(robot.b2body.getLinearVelocity().x, -30);
             v_y -= 30;
             pressed = true;
         }
-       /* if(!pressed)
-            robot.b2body.setLinearVelocity(0,0);
-        robot.b2body.setLinearVelocity(v_x, v_y);*/
-
        // robot magnetism no movement
        if(pressed)
-           robot.b2body.setLinearVelocity(v_x, v_y);
+           gameManager.getRandomRobot().getBody().setLinearVelocity(v_x, v_y);
 
-        v_x =0;
-        v_y=0;
+        v_x = 0;
+        v_y= 0;
 
         // detect mouse click
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-//            Gdx.input.getX();
-//            magnet1.cycleState();
-//            magnet2.cycleState();
-            System.out.println(GAME.viewport.getScaling());
+
+//            System.out.println(GAME.viewport.getScaling());
 
             Vector2 pointClicked = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(),Gdx.input.getY()));
             
-//            magneticForceManager.updateMagnetState(Gdx.input.getX(), Gdx.input.getY());
-            magneticForceManager.updateMagnetState(pointClicked.x, pointClicked.y);
+//            gameManager.updateMagnetState(Gdx.input.getX(), Gdx.input.getY());
+            gameManager.updateMagnetState(pointClicked.x, pointClicked.y);
 
         }
 
@@ -204,8 +157,10 @@ public class GameScreen implements Screen {
 
 
         world.step(1/60f,1,1);
-        robot.update(delta);
-        magneticForceManager.act();
+
+        gameManager.act(delta);
+        hudStage.update(delta);
+
 
     }
 
@@ -227,25 +182,21 @@ public class GameScreen implements Screen {
         GAME.batch.begin();
 
         outerWallSprite.draw(GAME.batch);
-        robot.draw(GAME.batch);
 
-        magnet1.draw(GAME.batch);
-        magnet2.draw(GAME.batch);
-
-//        timeLayout.width = 3;
+        gameManager.draw(GAME.batch);
 
 //        GAME.font.draw(GAME.batch, timeLayout, Gdx.graphics.getWidth()/2f - timeLayout.width/2f, Gdx.graphics.getHeight() - timeLayout.height - 1);
-        GAME.font.draw(GAME.batch, timeLayout,  Constants.GAME_WIDTH/2f - timeLayout.width/2f, Constants.GAME_HEIGHT - 3);
-        GAME.font.draw(GAME.batch, scoreLayout,  Constants.GAME_WIDTH - scoreLayout.width - 2, Constants.GAME_HEIGHT - 3);
+//        GAME.font.draw(GAME.batch, timeLayout,  Constants.GAME_WIDTH/2f - timeLayout.width/2f, Constants.GAME_HEIGHT - 3);
+//        GAME.font.draw(GAME.batch, scoreLayout,  Constants.GAME_WIDTH - scoreLayout.width - 2, Constants.GAME_HEIGHT - 3);
+
+
 
         GAME.batch.end();
 
+        GAME.batch.setProjectionMatrix(hudStage.stage.getCamera().combined);
+        hudStage.stage.draw();
 
         debugRenderer.render(world, GAME.camera.combined);
-
-//        stage.act(delta);
-//
-//        stage.draw();
 
 
     }
@@ -276,6 +227,8 @@ public class GameScreen implements Screen {
     public void dispose() {
 
         world.dispose();
+        stage.dispose();
+        hudStage.dispose();
 
 
     }

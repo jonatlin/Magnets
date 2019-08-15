@@ -18,7 +18,7 @@ public class Magnet extends Sprite {
     public int characterWidth = 4;
     public int characterHeight = 4;
 
-    public Body b2body;
+    public Body body;
     public World world;
 
     public State state;
@@ -28,7 +28,7 @@ public class Magnet extends Sprite {
     public Magnet(World world, int pos_x, int pos_y) {
 
         // set sprite based on state
-        super((new Texture(Gdx.files.internal("magnet_off.png"))));
+        super((new Texture(Gdx.files.internal("magnet/magnet_off.png"))));
 
         setState(State.OFF);
 //        state = State.OFF;
@@ -39,7 +39,7 @@ public class Magnet extends Sprite {
         bdef.position.set(pos_x, pos_y);
 
         bdef.type = BodyDef.BodyType.StaticBody;
-        b2body = world.createBody(bdef);
+        body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
 
@@ -47,9 +47,9 @@ public class Magnet extends Sprite {
         bodyShape.setAsBox(characterWidth/2f, characterHeight/2f);
 
         fdef.shape = bodyShape;
-        b2body.createFixture(fdef);
+        body.createFixture(fdef);
 
-        setBounds(Math.round(b2body.getPosition().x - getWidth() / 2),Math.round(b2body.getPosition().y - getHeight() / 2),characterWidth,characterHeight);
+        setBounds(Math.round(body.getPosition().x - getWidth() / 2),Math.round(body.getPosition().y - getHeight() / 2),characterWidth,characterHeight);
 
 
     }
@@ -61,15 +61,19 @@ public class Magnet extends Sprite {
 
     public void updateSprite() {
         if(state == State.ATTRACT)
-            setRegion(new Texture(Gdx.files.internal("magnet_attract.png")));
+            setRegion(new Texture(Gdx.files.internal("magnet/magnet_attract.png")));
         if(state == State.REPEL)
-            setRegion(new Texture(Gdx.files.internal("magnet_repel.png")));
+            setRegion(new Texture(Gdx.files.internal("magnet/magnet_repel.png")));
         if(state == State.OFF)
-            setRegion(new Texture(Gdx.files.internal("magnet_off.png")));
+            setRegion(new Texture(Gdx.files.internal("magnet/magnet_off.png")));
     }
 
     public State getState() {
         return this.state;
+    }
+
+    public Body getBody() {
+        return this.body;
     }
 
     public void cycleState() {

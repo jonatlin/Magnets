@@ -19,12 +19,12 @@ public class Robot extends Sprite {
     public int characterWidth = 5;
     public int characterHeight = 5;
 
-    public Body b2body;
+    public Body body;
     public World world;
 
     public Robot(World world, int pos_x, int pos_y) {
 
-        super((new Texture(Gdx.files.internal("robot_blue.png"))));
+        super((new Texture(Gdx.files.internal("robot/robot_blue.png"))));
         // for set texture manually
 //        setRegion(new Texture(Gdx.files.internal("MagnetMan.png")));
 
@@ -34,7 +34,7 @@ public class Robot extends Sprite {
         bdef.position.set(pos_x, pos_y);
 
         bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
 
@@ -45,19 +45,25 @@ public class Robot extends Sprite {
         bodyShape.setAsBox(characterWidth/2f, characterHeight/2f);
 
         fdef.shape = bodyShape;
-        b2body.createFixture(fdef);
-        b2body.setLinearDamping(5f);
+        body.createFixture(fdef);
+        body.setLinearDamping(5f);
 
-//        b2body.createFixture(fdef).setUserData(this);
 
-        setBounds(Math.round(b2body.getPosition().x - getWidth() / 2),Math.round(b2body.getPosition().y - getHeight() / 2),characterWidth,characterHeight);
+
+//        body.createFixture(fdef).setUserData(this);
+
+        setBounds(Math.round(body.getPosition().x - getWidth() / 2),Math.round(body.getPosition().y - getHeight() / 2),characterWidth,characterHeight);
+    }
+
+    public Body getBody() {
+        return body;
     }
 
     public void update(float dt) {
 //        System.out.println("Sprite position: " + getX() + ", " + getY());
-//        System.out.println("box2d body position" + b2body.getPosition().x + ", " + b2body.getPosition().y );
-//        System.out.println(Math.round(b2body.getPosition().x - getWidth() / 2) + ", " + Math.round(b2body.getPosition().y - getHeight() / 2));
-        setPosition(Math.round(b2body.getPosition().x - getWidth() / 2) , Math.round(b2body.getPosition().y - getHeight() / 2));
+//        System.out.println("box2d body position" + body.getPosition().x + ", " + body.getPosition().y );
+//        System.out.println(Math.round(body.getPosition().x - getWidth() / 2) + ", " + Math.round(body.getPosition().y - getHeight() / 2));
+        setPosition(Math.round(body.getPosition().x - getWidth() / 2) , Math.round(body.getPosition().y - getHeight() / 2));
     }
 
 

@@ -48,6 +48,26 @@ public class WallBody {
 
     }
 
+    public static void createWall(World world, int x1, int y1, int x2, int y2) {
+        Body b2body;
+
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(0, 0);
+
+        bdef.type = BodyDef.BodyType.StaticBody;
+        b2body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+
+        EdgeShape wall = new EdgeShape();
+        wall.set(x1, y1, x2, y2);
+
+        fdef.shape = wall;
+        fdef.friction = 1;
+        b2body.createFixture(fdef);
+
+    }
+
     public void update(float dt) {
 //        System.out.println(b2body.getPosition().x + ", " + b2body.getPosition().y);
     }
