@@ -30,30 +30,36 @@ public class HudStage implements Disposable {
 
     private int startCountdown;
 
+    private Constants.GameMode mode;
 
-    public HudStage(SpriteBatch sb, BitmapFont font, int countdown) {
+    /*public enum Mode {
+        FREE_PLAY, STANDARD
+    }*/
 
-        startCountdown = countdown;
-        this.countdown = startCountdown;
-        score = 0;
+    public HudStage(SpriteBatch sb, BitmapFont font, Viewport viewport, int countdown, Constants.GameMode mode) {
 
-        viewport = new FitViewport(Constants.GAME_WIDTH, Constants.GAME_HEIGHT, new OrthographicCamera());
+        this.mode = mode;
+
         stage = new Stage(viewport, sb);
-
         Table table = new Table();
         table.top();
         table.setFillParent(true);
 
-        countdownLabel = new Label(String.format(Locale.US,"%03d", countdown), new Label.LabelStyle(font, Color.WHITE));
         scoreLabel = new Label(String.format(Locale.US,"%03d", score), new Label.LabelStyle(font, Color.WHITE));
+        score = 0;
+        table.add(scoreLabel).expandX().padTop(0);
 
 
-        table.add(countdownLabel).expandX().padTop(1);
-        table.add(scoreLabel).expandX().padTop(1);
-
+        if(mode == Constants.GameMode.FREE_PLAY) {
+            countdownLabel = null;
+        }
+        else {
+            startCountdown = countdown;
+            this.countdown = startCountdown;
+            countdownLabel = new Label(String.format(Locale.US,"%03d", countdown), new Label.LabelStyle(font, Color.CHARTREUSE));
+            table.add(countdownLabel).expandX().padTop(0);
+        }
         stage.addActor(table);
-
-
 
     }
 
@@ -63,7 +69,8 @@ public class HudStage implements Disposable {
             if (countdown > 0) {
                 countdown--;
             }
-            countdownLabel.setText(String.format(Locale.US,"%03d", countdown));
+            if(this.mode!=Constants.GameMode.FREE_PLAY)
+                countdownLabel.setText(String.format(Locale.US,"%03d", countdown));
             timeCount = 0;
         }
     }

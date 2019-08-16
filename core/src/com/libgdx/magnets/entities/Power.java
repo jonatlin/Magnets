@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Power extends Sprite {
 
-    public int characterWidth = 4;
-    public int characterHeight = 9;
+    public int characterWidth = 5;
+    public int characterHeight = 5;
 
     public Power(int pos_x, int pos_y) {
 
-        super((new Texture(Gdx.files.internal("power.png"))));
+        super((new Texture(Gdx.files.internal("entities/power/power_small.png"))));
 
         setBounds(pos_x, pos_y,characterWidth,characterHeight);
 

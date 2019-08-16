@@ -28,7 +28,7 @@ public class Magnet extends Sprite {
     public Magnet(World world, int pos_x, int pos_y) {
 
         // set sprite based on state
-        super((new Texture(Gdx.files.internal("magnet/magnet_off.png"))));
+        super((new Texture(Gdx.files.internal("entities/magnet/magnet_off.png"))));
 
         setState(State.OFF);
 //        state = State.OFF;
@@ -61,11 +61,11 @@ public class Magnet extends Sprite {
 
     public void updateSprite() {
         if(state == State.ATTRACT)
-            setRegion(new Texture(Gdx.files.internal("magnet/magnet_attract.png")));
+            setRegion(new Texture(Gdx.files.internal("entities/magnet/magnet_attract.png")));
         if(state == State.REPEL)
-            setRegion(new Texture(Gdx.files.internal("magnet/magnet_repel.png")));
+            setRegion(new Texture(Gdx.files.internal("entities/magnet/magnet_repel.png")));
         if(state == State.OFF)
-            setRegion(new Texture(Gdx.files.internal("magnet/magnet_off.png")));
+            setRegion(new Texture(Gdx.files.internal("entities/magnet/magnet_off.png")));
     }
 
     public State getState() {

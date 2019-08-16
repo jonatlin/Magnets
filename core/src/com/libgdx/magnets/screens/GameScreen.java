@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
+import com.libgdx.magnets.Constants;
 import com.libgdx.magnets.GameManager;
 import com.libgdx.magnets.Stages.HudStage;
 import com.libgdx.magnets.MagnetsGame;
@@ -52,12 +53,8 @@ public class GameScreen implements Screen {
     // input pressed
     private boolean pressed;
 
-    // timer
-    Timer timer;
-    TimeUtils a;
 
-
-    public GameScreen(final MagnetsGame game) {
+    public GameScreen(final MagnetsGame game, Constants.GameMode mode) {
 
         this.GAME = game;
         this.stage = new Stage(GAME.viewport, GAME.batch);
@@ -67,29 +64,14 @@ public class GameScreen implements Screen {
 
         debugRenderer = new Box2DDebugRenderer();
 
-
-
         // outer wall sprite
-        outerWallSprite = new Sprite((new Texture(Gdx.files.internal("outer_walls2.png"))));
+        outerWallSprite = new Sprite((new Texture(Gdx.files.internal("backgrounds/play_background1.png"))));
         outerWallSprite.setPosition(0,0);
-/*
-        // Main character
-        robot = new Robot(world, 30,30);
-
-        // Magnets
-        magnet1 = new Magnet(world, 40,40);
-        magnet2 = new Magnet(world, 10,10);
-
-        // Power
-        power = new Power(20,40);*/
 
         gameManager = new GameManager();
-        /*gameManager.addRobot(robot);
-        gameManager.addMagnet(magnet1);
-        gameManager.addMagnet(magnet2);
-        gameManager.addPower(power);*/
 
-        hudStage = new HudStage(game.batch, GAME.font, 60);
+
+        hudStage = new HudStage(game.batch, GAME.font, GAME.viewport, 60,  mode);
         gameManager.setHudStage(hudStage);
         gameManager.setWorld(world);
 
@@ -181,15 +163,9 @@ public class GameScreen implements Screen {
         // draw objects
         GAME.batch.begin();
 
-        outerWallSprite.draw(GAME.batch);
+//        outerWallSprite.draw(GAME.batch);
 
         gameManager.draw(GAME.batch);
-
-//        GAME.font.draw(GAME.batch, timeLayout, Gdx.graphics.getWidth()/2f - timeLayout.width/2f, Gdx.graphics.getHeight() - timeLayout.height - 1);
-//        GAME.font.draw(GAME.batch, timeLayout,  Constants.GAME_WIDTH/2f - timeLayout.width/2f, Constants.GAME_HEIGHT - 3);
-//        GAME.font.draw(GAME.batch, scoreLayout,  Constants.GAME_WIDTH - scoreLayout.width - 2, Constants.GAME_HEIGHT - 3);
-
-
 
         GAME.batch.end();
 

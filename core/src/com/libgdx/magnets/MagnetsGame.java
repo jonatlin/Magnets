@@ -36,9 +36,6 @@ public class MagnetsGame extends Game {
 		viewport = new FitViewport(Constants.GAME_WIDTH,Constants.GAME_HEIGHT,camera);
 		viewport.apply();
 
-
-
-
 		batch = new SpriteBatch();
 
 
