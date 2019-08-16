@@ -107,7 +107,7 @@ public class GameManager {
 
         this.resetEntities();
 
-        int minDistance = 6;
+        double minDistance = 7;
         int numMagnets = 4;
         int numPowers = 2;
         int numRobots = 1;
@@ -120,7 +120,7 @@ public class GameManager {
             // if entities spawn touching boxes can overlap
             Point newPoint = new Point(MathUtils.random(2, Constants.GAME_WIDTH-4),MathUtils.random(2, 50));
 
-            if(isMinDistanceFromPoints(newPoint, pointList)) {
+            if(isMinDistanceFromPoints(newPoint, pointList, minDistance)) {
                 pointList.add(newPoint);
             }
 
@@ -146,14 +146,15 @@ public class GameManager {
 
     }
 
-    public boolean isMinDistanceFromPoints(Point newPoint, ArrayList<Point> pointList) {
+    public boolean isMinDistanceFromPoints(Point newPoint, ArrayList<Point> pointList, double minDistance) {
 
-        if(newPoint.x < 2 || newPoint.x > Constants.GAME_WIDTH - 6 || newPoint.y < 2 || newPoint.y > (Constants.GAME_HEIGHT - 8 - 6)  ) {
+        if(newPoint.x < 3 || newPoint.x > Constants.GAME_WIDTH - 6 || newPoint.y < 3 || newPoint.y > (Constants.GAME_HEIGHT - 8 - 6)  ) {
             return false;
         }
 
         for(Point point: pointList) {
-            if (Math.abs(newPoint.x - point.x) < 6 || Math.abs(newPoint.y - point.y) < 6)
+//            if (Math.abs(newPoint.x - point.x) < 6 || Math.abs(newPoint.y - point.y) < 6)
+            if(newPoint.distance(point) < minDistance)
                 return false;
         }
 

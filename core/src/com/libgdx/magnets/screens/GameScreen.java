@@ -25,7 +25,7 @@ import com.libgdx.magnets.entities.WallBody;
 public class GameScreen implements Screen {
 
     private final MagnetsGame GAME;
-    private Stage stage;
+//    private Stage stage;
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -57,8 +57,7 @@ public class GameScreen implements Screen {
     public GameScreen(final MagnetsGame game, Constants.GameMode mode) {
 
         this.GAME = game;
-        this.stage = new Stage(GAME.viewport, GAME.batch);
-        Gdx.input.setInputProcessor(stage);
+//        this.stage = new Stage(GAME.viewport, GAME.batch);
 
         world = new World(new Vector2(0, 0), true);
 
@@ -71,7 +70,8 @@ public class GameScreen implements Screen {
         gameManager = new GameManager();
 
 
-        hudStage = new HudStage(game.batch, GAME.font, GAME.viewport, 60,  mode);
+        hudStage = new HudStage(GAME, 60,  mode);
+//        Gdx.input.setInputProcessor(hudStage);
         gameManager.setHudStage(hudStage);
         gameManager.setWorld(world);
 
@@ -84,6 +84,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(hudStage);
 
     }
 
@@ -119,7 +120,9 @@ public class GameScreen implements Screen {
 
 //            System.out.println(GAME.viewport.getScaling());
 
-            Vector2 pointClicked = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(),Gdx.input.getY()));
+//            if(hudStage.hit(Gdx.input.getX(),Gdx.input.getY(), true).equals(hudStage.))
+
+            Vector2 pointClicked = hudStage.screenToStageCoordinates(new Vector2(Gdx.input.getX(),Gdx.input.getY()));
             
 //            gameManager.updateMagnetState(Gdx.input.getX(), Gdx.input.getY());
             gameManager.updateMagnetState(pointClicked.x, pointClicked.y);
@@ -203,7 +206,7 @@ public class GameScreen implements Screen {
     public void dispose() {
 
         world.dispose();
-        stage.dispose();
+//        stage.dispose();
         hudStage.dispose();
 
 
