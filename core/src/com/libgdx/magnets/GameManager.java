@@ -48,7 +48,7 @@ public class GameManager {
         robotList = new ArrayList<Robot>();
         powerList = new ArrayList<Power>();
 
-        background = new Sprite((new Texture(Gdx.files.internal("backgrounds/play_background2.png"))));
+        background = new Sprite((new Texture(Gdx.files.internal("backgrounds/play_background3.png"))));
         background.setPosition(0, 0);
     }
 
@@ -126,8 +126,9 @@ public class GameManager {
 
         double minDistance = 7;
 
-        int numMagnets = 4;
-        int numPowers = 2;
+        int numMagnets = MathUtils.random(3,4);
+        int numPowers = MathUtils.random(2,4);
+//        int numRobots = MathUtils.random(1,2);
         int numRobots = 1;
 
         // magnet width/height
@@ -150,7 +151,7 @@ public class GameManager {
 
         for (Point point : pointList) {
             if (numMagnets > 0) {
-                addMagnet(new Magnet(world, point.x, point.y, magnetSize, magnetSize));
+                addMagnet(new Magnet(world, point.x, point.y));
                 numMagnets--;
             } else if (numPowers > 0) {
                 addPower(new Power(point.x - powerSize / 2, point.y - powerSize / 2));

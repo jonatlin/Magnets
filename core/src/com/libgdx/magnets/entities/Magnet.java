@@ -25,13 +25,13 @@ public class Magnet extends Sprite {
 
 
     // pos_x, pos_y bottom left corner of sprite
-    public Magnet(World world, int pos_x, int pos_y, int width, int height) {
+    public Magnet(World world, int pos_x, int pos_y) {
 
         // set sprite based on state
         super((new Texture(Gdx.files.internal("entities/magnet/magnet_off.png"))));
 
-        this.width = width;
-        this.height = height;
+//        this.width = width;
+//        this.height = height;
 
         setState(State.OFF);
 //        state = State.OFF;

@@ -151,7 +151,7 @@ public class GameScreen implements Screen {
 
 //        GAME.shapeRenderer.setProjectionMatrix(GAME.camera.combined);
 
-        Gdx.gl.glClearColor(0.2f, 0.1f, 0.1f, 1);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 //        GAME.batch.setProjectionMatrix(GAME.camera.combined);

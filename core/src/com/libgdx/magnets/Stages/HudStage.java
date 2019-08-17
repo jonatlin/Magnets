@@ -55,7 +55,7 @@ public class HudStage extends Stage {
         table.top();
         table.setFillParent(true);
 
-        Drawable exitDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/exit_button_filled.png")));
+        Drawable exitDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/exit_button_red.png")));
         exitButton = new ImageButton(exitDrawable);
 
         // shouldn't check here
@@ -76,12 +76,11 @@ public class HudStage extends Stage {
         else {
             startCountdown = countdown;
             this.countdown = startCountdown;
-            countdownLabel = new Label("Start", new Label.LabelStyle(game.font, Color.CHARTREUSE));
+            countdownLabel = new Label("Start", new Label.LabelStyle(game.font, Color.WHITE));
             table.add(countdownLabel).padTop(0).expandX().center();
         }
 
-
-        scoreLabel = new Label(String.format(Locale.US,"%04d", score), new Label.LabelStyle(game.font, Color.WHITE));
+        scoreLabel = new Label(String.format(Locale.US,"%04d", score), new Label.LabelStyle(game.font,Color.valueOf("ffc525")));
         score = 0;
         table.add(scoreLabel).padTop(0).expandX().right().padRight(1);
 
@@ -99,7 +98,7 @@ public class HudStage extends Stage {
     }
 
     public void setTime(int time) {
-        countdownLabel.setText(String.format(Locale.US,"%03d", time));
+        countdownLabel.setText(time);
 
     }
 

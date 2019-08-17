@@ -75,7 +75,7 @@ public class GameSummaryScreen extends ScreenAdapter {
 
 
         gameModeLabel = new Label((modeString), new Label.LabelStyle(game.font, Color.WHITE));
-        scoreLabel = new Label(String.format(Locale.US,"%04d", score), new Label.LabelStyle(game.font, Color.WHITE));
+        scoreLabel = new Label(String.format(Locale.US,"%04d", score), new Label.LabelStyle(game.font, Color.valueOf("ffc525")));
 
         Drawable mainMenuButtonDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/red_button.png")));
         textButtonStyle = new TextButton.TextButtonStyle(mainMenuButtonDrawable, mainMenuButtonDrawable,mainMenuButtonDrawable, GAME.font);
