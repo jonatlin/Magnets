@@ -15,8 +15,8 @@ public class Magnet extends Sprite {
         REPEL, ATTRACT, OFF
     }
 
-    public int characterWidth = 4;
-    public int characterHeight = 4;
+    public int width = 4;
+    public int height = 4;
 
     public Body body;
     public World world;
@@ -25,10 +25,13 @@ public class Magnet extends Sprite {
 
 
     // pos_x, pos_y bottom left corner of sprite
-    public Magnet(World world, int pos_x, int pos_y) {
+    public Magnet(World world, int pos_x, int pos_y, int width, int height) {
 
         // set sprite based on state
         super((new Texture(Gdx.files.internal("entities/magnet/magnet_off.png"))));
+
+        this.width = width;
+        this.height = height;
 
         setState(State.OFF);
 //        state = State.OFF;
@@ -44,15 +47,21 @@ public class Magnet extends Sprite {
         FixtureDef fdef = new FixtureDef();
 
         PolygonShape bodyShape = new PolygonShape();
-        bodyShape.setAsBox(characterWidth/2f, characterHeight/2f);
+        bodyShape.setAsBox(width/2f, height/2f);
 
         fdef.shape = bodyShape;
         body.createFixture(fdef);
 
-        setBounds(Math.round(body.getPosition().x - getWidth() / 2),Math.round(body.getPosition().y - getHeight() / 2),characterWidth,characterHeight);
+        setBounds(Math.round(body.getPosition().x - getWidth() / 2),Math.round(body.getPosition().y - getHeight() / 2),width,height);
 
 
     }
+    
+/*
+    public static int getSize() {
+        return Math.max(width, height);
+    }
+*/
 
     public void setState(State state) {
         this.state = state;

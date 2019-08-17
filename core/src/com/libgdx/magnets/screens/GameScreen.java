@@ -68,9 +68,9 @@ public class GameScreen implements Screen {
         outerWallSprite.setPosition(0,0);
 
         gameManager = new GameManager();
+        gameManager.setGameMode(mode);
 
-
-        hudStage = new HudStage(GAME, 60,  mode);
+        hudStage = new HudStage(GAME, 60, mode);
 //        Gdx.input.setInputProcessor(hudStage);
         gameManager.setHudStage(hudStage);
         gameManager.setWorld(world);
@@ -123,29 +123,24 @@ public class GameScreen implements Screen {
 //            if(hudStage.hit(Gdx.input.getX(),Gdx.input.getY(), true).equals(hudStage.))
 
             Vector2 pointClicked = hudStage.screenToStageCoordinates(new Vector2(Gdx.input.getX(),Gdx.input.getY()));
-            
+
 //            gameManager.updateMagnetState(Gdx.input.getX(), Gdx.input.getY());
-            gameManager.updateMagnetState(pointClicked.x, pointClicked.y);
+            gameManager.updateMagnetClick(pointClicked.x, pointClicked.y);
+//                gameManager.checkClick(pointClicked.x, pointClicked.y);
+
+            if(hudStage.isExitButtonArea(pointClicked.x, pointClicked.y)) {
+                GAME.setScreen( new GameSummaryScreen(GAME, gameManager.getGameMode(), gameManager.getScore()));
+            }
 
         }
-
-        /*double distance = Math.sqrt( Math.pow(robot.getX() - magnet1.getX() , 2) + Math.pow((robot.getY() - magnet1.getY()),2));
-        Vector2 repelVector = new Vector2(robot.getX() - magnet1.getX(), robot.getY() - magnet1.getY());
-        Vector2 attractVector = new Vector2(magnet1.getX() - robot.getX(), magnet1.getY() - robot.getY());
-        float scale = 12 * (float)(1/Math.pow(distance, 1.75));
-
-        // magnetic force act
-        if(magnet1.getState() == Magnet.State.REPEL)
-            robot.b2body.applyLinearImpulse(repelVector.scl(scale), robot.b2body.getWorldCenter(), true);
-        if(magnet1.getState() == Magnet.State.ATTRACT)
-            robot.b2body.applyLinearImpulse(attractVector.scl(scale), robot.b2body.getWorldCenter(), true);*/
-
 
         world.step(1/60f,1,1);
 
         gameManager.act(delta);
-        hudStage.update(delta);
 
+        if(gameManager.isCountdownDone()) {
+            GAME.setScreen( new GameSummaryScreen(GAME, gameManager.getGameMode(), gameManager.getScore()));
+        }
 
     }
 
@@ -172,8 +167,8 @@ public class GameScreen implements Screen {
 
         GAME.batch.end();
 
-        GAME.batch.setProjectionMatrix(hudStage.stage.getCamera().combined);
-        hudStage.stage.draw();
+        GAME.batch.setProjectionMatrix(hudStage.getCamera().combined);
+        hudStage.draw();
 
         debugRenderer.render(world, GAME.camera.combined);
 

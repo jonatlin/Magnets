@@ -1,5 +1,6 @@
 package com.libgdx.magnets;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -18,6 +19,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 public class GameManager {
 
@@ -36,52 +38,67 @@ public class GameManager {
 
     private int score = 0;
 
+    private Constants.GameMode mode;
+    private float timeCount;
+
+    private int countdown = 120;
+
     public GameManager() {
         magnetList = new ArrayList<Magnet>();
         robotList = new ArrayList<Robot>();
         powerList = new ArrayList<Power>();
 
         background = new Sprite((new Texture(Gdx.files.internal("backgrounds/play_background2.png"))));
-        background.setPosition(0,0);
+        background.setPosition(0, 0);
     }
 
     public void draw(Batch batch) {
 
         background.draw(batch);
 
-        for (Robot robot: robotList) {
+        for (Robot robot : robotList) {
             robot.draw(batch);
         }
-        for (Power power: powerList) {
+        for (Power power : powerList) {
             power.draw(batch);
         }
-        for (Magnet magnet: magnetList) {
+        for (Magnet magnet : magnetList) {
             magnet.draw(batch);
         }
 
 
+    }
+
+    public void checkClick(float x, float y) {
+
+        updateMagnetClick(x, y);
+        checkExitClick(x,y);
 
     }
 
-    public void updateMagnetState(float x, float y) {
+    public void checkExitClick(float x,float y) {
+
+        if (hudStage.hit(x,y, true) == hudStage.getExitButton()) {
+
+        }
+
+    }
+
+    public void updateMagnetClick(float x, float y) {
 
         Rectangle magnetRect;
-        System.out.println("update magnetic state");
+        System.out.println("update magnetic state: " + x + ", " + y);
 
-        for (Magnet magnet: magnetList) {
+        for (Magnet magnet : magnetList) {
 
             magnetRect = magnet.getBoundingRectangle();
            /* System.out.println(magnetRect.toString());
             System.out.println(x + ", " + y);*/
 
 
-            if(magnetRect.contains(x,y)) {
+            if (magnetRect.contains(x, y)) {
                 magnet.cycleState();
             }
-
-//            System.out.println(magnet.);
-
-//            if(magnet.)
 
         }
 
@@ -97,10 +114,10 @@ public class GameManager {
         int upY = Constants.GAME_HEIGHT - 8;
 
         // map boundaries
-        WallBody.createWall(world, leftX, upY,rightX,upY);
-        WallBody.createWall(world, rightX,downY,rightX,upY);
-        WallBody.createWall(world, leftX,downY,rightX,downY);
-        WallBody.createWall(world, leftX,downY,leftX,upY);
+        WallBody.createWall(world, leftX, upY, rightX, upY);
+        WallBody.createWall(world, rightX, downY, rightX, upY);
+        WallBody.createWall(world, leftX, downY, rightX, downY);
+        WallBody.createWall(world, leftX, downY, leftX, upY);
     }
 
     public void generateNewLevel() {
@@ -108,35 +125,37 @@ public class GameManager {
         this.resetEntities();
 
         double minDistance = 7;
+
         int numMagnets = 4;
         int numPowers = 2;
         int numRobots = 1;
 
+        // magnet width/height
+        int magnetSize = 4;
+        int robotSize = 5;
+        int powerSize = 5;
+
         ArrayList<Point> pointList = new ArrayList<Point>();
 
         // generate list of points at least minDistance apart.
-        while(pointList.size() < (numMagnets + numPowers + numRobots)) {
+        while (pointList.size() < (numMagnets + numPowers + numRobots)) {
 
             // if entities spawn touching boxes can overlap
-            Point newPoint = new Point(MathUtils.random(2, Constants.GAME_WIDTH-4),MathUtils.random(2, 50));
+            Point newPoint = new Point(MathUtils.random(2, Constants.GAME_WIDTH - 4), MathUtils.random(3, 50));
 
-            if(isMinDistanceFromPoints(newPoint, pointList, minDistance)) {
+            if (isMinDistanceFromPoints(newPoint, pointList, minDistance)) {
                 pointList.add(newPoint);
             }
-
-
         }
 
-        for(Point point : pointList) {
-            if(numMagnets>0) {
-                addMagnet(new Magnet(world, point.x, point.y));
+        for (Point point : pointList) {
+            if (numMagnets > 0) {
+                addMagnet(new Magnet(world, point.x, point.y, magnetSize, magnetSize));
                 numMagnets--;
-            }
-            else if(numPowers>0) {
-                addPower(new Power(point.x, point.y));
+            } else if (numPowers > 0) {
+                addPower(new Power(point.x - powerSize / 2, point.y - powerSize / 2));
                 numPowers--;
-            }
-            else if(numRobots>0) {
+            } else if (numRobots > 0) {
                 addRobot(new Robot(world, point.x, point.y));
                 numRobots--;
             }
@@ -148,13 +167,13 @@ public class GameManager {
 
     public boolean isMinDistanceFromPoints(Point newPoint, ArrayList<Point> pointList, double minDistance) {
 
-        if(newPoint.x < 3 || newPoint.x > Constants.GAME_WIDTH - 6 || newPoint.y < 3 || newPoint.y > (Constants.GAME_HEIGHT - 8 - 6)  ) {
+        if (newPoint.x < 3 || newPoint.x > Constants.GAME_WIDTH - 6 || newPoint.y < 3 || newPoint.y > (Constants.GAME_HEIGHT - 8 - 6)) {
             return false;
         }
 
-        for(Point point: pointList) {
+        for (Point point : pointList) {
 //            if (Math.abs(newPoint.x - point.x) < 6 || Math.abs(newPoint.y - point.y) < 6)
-            if(newPoint.distance(point) < minDistance)
+            if (newPoint.distance(point) < minDistance)
                 return false;
         }
 
@@ -164,20 +183,16 @@ public class GameManager {
 
         }*/
 
-       System.out.println(newPoint.toString());
+        System.out.println(newPoint.toString());
 
         return true;
     }
 
-    /*public double getDistance(int x1, int y1, int x2, int y2) {
-        return Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
-    }*/
-
-    public void resetEntities() {
-        for(Magnet magnet: magnetList)
+    private void resetEntities() {
+        for (Magnet magnet : magnetList)
             world.destroyBody(magnet.getBody());
 
-        for(Robot robot: robotList)
+        for (Robot robot : robotList)
             world.destroyBody(robot.getBody());
 
         magnetList.clear();
@@ -210,25 +225,49 @@ public class GameManager {
         this.hudStage.setScore(score);
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setGameMode(Constants.GameMode mode) {
+        this.mode = mode;
+    }
+
+    public Constants.GameMode getGameMode() {
+        return this.mode;
+    }
+
     public void act(float delta) {
+        if(mode != Constants.GameMode.FREE_PLAY) {
+            updateCountdown(delta);
+            updateHudTime();
+        }
 
-            // Check if any robot hit a power piece and add magnetic forces to robot
-            for (Robot robot : robotList) {
+        // Check if any robot hit a power piece and add magnetic forces to robot
+        for (Robot robot : robotList) {
 
-                robot.update(delta);
+            robot.update(delta);
 
-                updatePowerHit(robot);
+            updatePowerHit(robot);
 
-                // Add forces from each magnet
-                for (Magnet magnet: magnetList) {
+            // Add forces from each magnet
+            for (Magnet magnet : magnetList) {
 //                System.out.println("applying magnetic force");
-                    applyMagneticForce(magnet, robot);
+                applyMagneticForce(magnet, robot);
             }
         }
 
-            if(powerList.isEmpty()) {
-                this.generateNewLevel();
-            }
+        if (powerList.isEmpty()) {
+            this.generateNewLevel();
+        }
+
+        if (hudStage.isCountdownDone()) {
+
+        }
+    }
+
+    public boolean isCountdownDone() {
+        return countdown<=0;
     }
 
     private void applyMagneticForce(Magnet magnet, Robot robot) {
@@ -246,11 +285,26 @@ public class GameManager {
 
     }
 
+    private void updateCountdown(float delta) {
+        timeCount += delta;
+        if (timeCount >= 1) {
+            if (countdown > 0) {
+                countdown--;
+            }
+            timeCount = 0;
+        }
+    }
+
+    private void updateHudTime() {
+        if (this.mode != Constants.GameMode.FREE_PLAY)
+            hudStage.setTime(countdown);
+    }
+
     private void updatePowerHit(Robot robot) {
 
         final Rectangle robotRect;
 
-            robotRect = robot.getBoundingRectangle();
+        robotRect = robot.getBoundingRectangle();
 
         for (Iterator<Power> iter = powerList.listIterator(); iter.hasNext(); ) {
             Power power = iter.next();
@@ -261,22 +315,18 @@ public class GameManager {
             }
         }
 
+    }
 
+    // for playtesting
+    public Robot getRandomRobot() {
+        if (!robotList.isEmpty())
+            return robotList.get(0);
+        else
+            return null;
+    }
 
-        }
-
-        // for playtesting
-        public Robot getRandomRobot() {
-            if(!robotList.isEmpty())
-                return robotList.get(0);
-            else
-                return null;
-        }
-
-        public void dispose() {
-            world.dispose();
-        }
-
-
+    public void dispose() {
+        world.dispose();
+    }
 
 }

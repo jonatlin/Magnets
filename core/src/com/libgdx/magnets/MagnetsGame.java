@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.libgdx.magnets.Stages.MainMenuStage;
 import com.libgdx.magnets.screens.GameScreen;
+import com.libgdx.magnets.screens.GameSummaryScreen;
 import com.libgdx.magnets.screens.MainMenuScreen;
 
 public class MagnetsGame extends Game {

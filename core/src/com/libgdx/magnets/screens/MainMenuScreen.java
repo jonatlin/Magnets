@@ -30,13 +30,22 @@ public class MainMenuScreen extends ScreenAdapter {
     private MagnetsGame GAME;
     private Stage stage;
 
-    private Image logo;
-    private ImageButton freePlayButton;
-    private ImageButton standardButton;
+    private Image logoImage;
+    /*private ImageButton freePlayButton;
+    private ImageButton standardButton;*/
+
+    private TextField logoText;
+    private TextField.TextFieldStyle textFieldStyle;
+
+    private TextButton logoButton;
+    private TextButton freePlayButton;
+    private TextButton standardButton;
+    private TextButton.TextButtonStyle textButtonStyle;
+
+
 
 
     private Sprite mainMenuBackground;
-    private Sprite test;
 
     public MainMenuScreen(final MagnetsGame game) {
 
@@ -55,15 +64,33 @@ public class MainMenuScreen extends ScreenAdapter {
         //Set alignment of contents in the table.
         mainTable.center();
 
-        Drawable logoDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/logo_text.png")));
-        logo = new Image(logoDrawable);
+       /* textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.font = game.font;
+        textFieldStyle.fontColor = Color.BLACK;
+        logoText = new TextField("MAGNETS", textFieldStyle);
 
-        Drawable standardDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/solid_standard_button.png")));
+        logoButton = new TextButton("STANDARD", textButtonStyle);
+        logoButton.scaleBy(2);*/
+
+
+
+        Drawable buttonDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/blank_button.png")));
+        Drawable logoDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/logo_text.png")));
+
+        textButtonStyle = new TextButton.TextButtonStyle(buttonDrawable, buttonDrawable,buttonDrawable, GAME.font);
+
+        logoImage = new Image(logoDrawable);
+        standardButton = new TextButton("STANDARD", textButtonStyle);
+        freePlayButton = new TextButton("FREE PLAY", textButtonStyle);
+
+
+
+       /* Drawable standardDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/solid_standard_button.png")));
         standardButton = new ImageButton(standardDrawable);
 
 
         Drawable freePlayDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/solid_freeplay_button.png")));
-        freePlayButton = new ImageButton(freePlayDrawable);
+        freePlayButton = new ImageButton(freePlayDrawable);*/
 
 
 
@@ -83,7 +110,7 @@ public class MainMenuScreen extends ScreenAdapter {
             }
         });
 
-        mainTable.add(logo).padBottom(5);
+        mainTable.add(logoImage).padBottom(5);
         mainTable.row();
         mainTable.add(standardButton).padTop(2);
         mainTable.row();
