@@ -2,29 +2,16 @@ package com.libgdx.magnets.Stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.libgdx.magnets.Constants;
-import com.libgdx.magnets.GameManager;
+import com.libgdx.magnets.utility.Constants;
 import com.libgdx.magnets.MagnetsGame;
-import com.libgdx.magnets.screens.GameScreen;
-import com.libgdx.magnets.screens.GameSummaryScreen;
-import com.libgdx.magnets.screens.MainMenuScreen;
-
-import java.util.Locale;
 
 public class HudStage extends Stage {
 
@@ -50,7 +37,6 @@ public class HudStage extends Stage {
         this.mode = mode;
 //        this.game = game;
 
-//        stage = new Stage(game.viewport, game.batch);
         Table table = new Table();
         table.top();
         table.setFillParent(true);
@@ -59,13 +45,13 @@ public class HudStage extends Stage {
         exitButton = new ImageButton(exitDrawable);
 
         // shouldn't check here
-        exitButton.addListener(new ClickListener() {
+        /*exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Exiting");
                 game.setScreen(new GameSummaryScreen(game, Constants.GameMode.FREE_PLAY, 1));
             }
-        });
+        });*/
 
         table.add(exitButton).expandX().left();
 
@@ -80,7 +66,8 @@ public class HudStage extends Stage {
             table.add(countdownLabel).padTop(0).expandX().center();
         }
 
-        scoreLabel = new Label(String.format(Locale.US,"%04d", score), new Label.LabelStyle(game.font,Color.valueOf("ffc525")));
+//        scoreLabel = new Label(String.format(Locale.US,"%04d", score), new Label.LabelStyle(game.font,Color.valueOf("ffc525")));
+        scoreLabel = new Label(String.valueOf(score), new Label.LabelStyle(game.font,Color.valueOf("ffc525")));
         score = 0;
         table.add(scoreLabel).padTop(0).expandX().right().padRight(1);
 
@@ -104,12 +91,13 @@ public class HudStage extends Stage {
 
     public void setScore(int score) {
         this.score = score;
-        scoreLabel.setText(String.format(Locale.US,"%04d", score));
+//        scoreLabel.setText(String.format(Locale.US,"%04d", score));
+        scoreLabel.setText(String.valueOf(score));
 
     }
 
     public boolean isExitButtonArea(float x, float y) {
-        System.out.println("check exit button clicked");
+//        System.out.println("check exit button clicked");
 
         if(exitButton.getX() < x && (exitButton.getX() + exitButton.getWidth()) > x)
             if(exitButton.getY() < y && (exitButton.getY() + exitButton.getHeight()) > y)

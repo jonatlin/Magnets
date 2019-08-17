@@ -48,6 +48,7 @@ public class WallBody {
 
     }
 
+    // create box2d wall from 2 points
     public static void createWall(World world, int x1, int y1, int x2, int y2) {
         Body b2body;
 

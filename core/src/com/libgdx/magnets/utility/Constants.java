@@ -1,4 +1,4 @@
-package com.libgdx.magnets;
+package com.libgdx.magnets.utility;
 
 public class Constants {
 

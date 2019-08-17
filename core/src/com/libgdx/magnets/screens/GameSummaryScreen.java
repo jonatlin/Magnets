@@ -2,36 +2,26 @@ package com.libgdx.magnets.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.libgdx.magnets.Constants;
+import com.libgdx.magnets.utility.Constants;
 import com.libgdx.magnets.MagnetsGame;
-
-import java.util.Locale;
 
 public class GameSummaryScreen extends ScreenAdapter {
 
     private MagnetsGame GAME;
     private Stage stage;
-
-    private TextArea scoreTextArea;
-    private TextField.TextFieldStyle textFieldStyle;
 
     private Label gameModeLabel;
     private Label scoreLabel;
@@ -39,11 +29,7 @@ public class GameSummaryScreen extends ScreenAdapter {
     private TextButton mainMenuButton;
     private TextButton.TextButtonStyle textButtonStyle;
 
-
-
-
     private Sprite gameSummaryBackground;
-
 
     public GameSummaryScreen(final MagnetsGame game, Constants.GameMode mode, int score) {
 
@@ -54,12 +40,12 @@ public class GameSummaryScreen extends ScreenAdapter {
 
         gameSummaryBackground = new Sprite(new Texture(Gdx.files.internal("backgrounds/menu_background_horizontal.png")));
 
-
+        // table to hold score/buttons
         Table mainTable = new Table();
         mainTable.setFillParent(true);
         mainTable.align(Align.center);
 
-        // broken class?
+        // textfield/textarea doesn't display?
         /*textFieldStyle = new TextField.TextFieldStyle(game.font,  Color.BLACK, mainMenuButtonDrawable,mainMenuButtonDrawable,mainMenuButtonDrawable);
         textFieldStyle.font = game.font;
         textFieldStyle.fontColor = Color.BLACK;
@@ -67,16 +53,19 @@ public class GameSummaryScreen extends ScreenAdapter {
 
         String modeString = "STANDARD";
 
+        //determine what mode was played
         if(mode == Constants.GameMode.STANDARD)
             modeString = "STANDARD";
         else if(mode == Constants.GameMode.FREE_PLAY)
             modeString = "FREE PLAY";
 
-
-
+        // can't use String.format for html?
         gameModeLabel = new Label((modeString), new Label.LabelStyle(game.font, Color.WHITE));
-        scoreLabel = new Label(String.format(Locale.US,"%04d", score), new Label.LabelStyle(game.font, Color.valueOf("ffc525")));
+//        scoreLabel = new Label(String.format(Locale.US,"%04d", score), new Label.LabelStyle(game.font, Color.valueOf("ffc525")));
+        scoreLabel = new Label(score + "", new Label.LabelStyle(game.font, Color.valueOf("ffc525")));
+        Gdx.app.log("MyTag", "" + score);
 
+        // create back to main menu button style
         Drawable mainMenuButtonDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/red_button.png")));
         textButtonStyle = new TextButton.TextButtonStyle(mainMenuButtonDrawable, mainMenuButtonDrawable,mainMenuButtonDrawable, GAME.font);
 
@@ -89,6 +78,7 @@ public class GameSummaryScreen extends ScreenAdapter {
             }
         });
 
+        // add elements to table
         mainTable.add(gameModeLabel);
         mainTable.row();
         mainTable.add(scoreLabel).padBottom(10);
@@ -120,12 +110,10 @@ public class GameSummaryScreen extends ScreenAdapter {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-
     }
 
     @Override
     public void resize(int width, int height) {
-//        stage.getViewport().update(width, height, false);
         GAME.viewport.update(width, height, false);
         GAME.camera.update();
     }

@@ -2,7 +2,7 @@ package com.libgdx.magnets.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.libgdx.magnets.Constants;
+import com.libgdx.magnets.utility.Constants;
 import com.libgdx.magnets.MagnetsGame;
 
 public class DesktopLauncher {

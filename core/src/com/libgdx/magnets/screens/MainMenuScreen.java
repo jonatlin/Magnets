@@ -1,19 +1,13 @@
 package com.libgdx.magnets.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -21,9 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.libgdx.magnets.Constants;
+import com.libgdx.magnets.utility.Constants;
 import com.libgdx.magnets.MagnetsGame;
-import com.libgdx.magnets.Stages.MainMenuStage;
 
 public class MainMenuScreen extends ScreenAdapter {
 
@@ -55,9 +48,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
         mainMenuBackground = new Sprite(new Texture(Gdx.files.internal("backgrounds/main_menu_background.png")));
 
-        //Create Table
         Table mainTable = new Table();
-        //Set table to fill stage
         mainTable.setFillParent(true);
         mainTable.align(Align.center);
 
@@ -72,8 +63,7 @@ public class MainMenuScreen extends ScreenAdapter {
         logoButton = new TextButton("STANDARD", textButtonStyle);
         logoButton.scaleBy(2);*/
 
-
-
+        // entity drawables
         Drawable buttonDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/blank_button.png")));
         Drawable logoDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/logo_text.png")));
 
@@ -82,16 +72,6 @@ public class MainMenuScreen extends ScreenAdapter {
         logoImage = new Image(logoDrawable);
         standardButton = new TextButton("STANDARD", textButtonStyle);
         freePlayButton = new TextButton("FREE PLAY", textButtonStyle);
-
-
-
-       /* Drawable standardDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/solid_standard_button.png")));
-        standardButton = new ImageButton(standardDrawable);
-
-
-        Drawable freePlayDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("buttons/solid_freeplay_button.png")));
-        freePlayButton = new ImageButton(freePlayDrawable);*/
-
 
 
         standardButton.addListener(new ClickListener() {
@@ -117,9 +97,6 @@ public class MainMenuScreen extends ScreenAdapter {
         mainTable.add(freePlayButton).padTop(2);
 
         stage.addActor(mainTable);
-//        stage.addActor(zenButton);
-
-
     }
 
     @Override
@@ -146,7 +123,6 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-//        stage.getViewport().update(width, height, false);
         GAME.viewport.update(width, height, false);
         GAME.camera.update();
     }

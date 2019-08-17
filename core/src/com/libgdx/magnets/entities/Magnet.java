@@ -56,12 +56,7 @@ public class Magnet extends Sprite {
 
 
     }
-    
-/*
-    public static int getSize() {
-        return Math.max(width, height);
-    }
-*/
+
 
     public void setState(State state) {
         this.state = state;

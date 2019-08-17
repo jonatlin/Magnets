@@ -60,9 +60,7 @@ public class Robot extends Sprite {
     }
 
     public void update(float dt) {
-//        System.out.println("Sprite position: " + getX() + ", " + getY());
-//        System.out.println("box2d body position" + body.getPosition().x + ", " + body.getPosition().y );
-//        System.out.println(Math.round(body.getPosition().x - getWidth() / 2) + ", " + Math.round(body.getPosition().y - getHeight() / 2));
+        // update robot sprite position to match body position
         setPosition(Math.round(body.getPosition().x - getWidth() / 2) , Math.round(body.getPosition().y - getHeight() / 2));
     }
 

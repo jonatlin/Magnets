@@ -3,24 +3,17 @@ package com.libgdx.magnets.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.Timer;
-import com.libgdx.magnets.Constants;
+import com.libgdx.magnets.utility.Constants;
 import com.libgdx.magnets.GameManager;
 import com.libgdx.magnets.Stages.HudStage;
 import com.libgdx.magnets.MagnetsGame;
-import com.libgdx.magnets.entities.Magnet;
-import com.libgdx.magnets.entities.Power;
-import com.libgdx.magnets.entities.Robot;
-import com.libgdx.magnets.entities.WallBody;
 
 public class GameScreen implements Screen {
 
@@ -30,21 +23,11 @@ public class GameScreen implements Screen {
     private World world;
     private Box2DDebugRenderer debugRenderer;
 
-    private GlyphLayout timeLayout;
-    private GlyphLayout scoreLayout;
-
-    private Robot robot;
-    private Magnet magnet1, magnet2, magnet3;
-    private Power power;
-
-    private WallBody northWallBody,eastWallBody,southWallBody,westWallBody;
-
     private GameManager gameManager;
 
     private HudStage hudStage;
 
     private Sprite outerWallSprite;
-    private Sprite northWallSprite, southWallSprite, eastWallSprite, westWallSprite;
 
     // character speed
     private int v_x = 0;
@@ -52,6 +35,10 @@ public class GameScreen implements Screen {
 
     // input pressed
     private boolean pressed;
+    private boolean justPressed;
+
+
+    private Music music;
 
 
     public GameScreen(final MagnetsGame game, Constants.GameMode mode) {
@@ -67,19 +54,20 @@ public class GameScreen implements Screen {
         outerWallSprite = new Sprite((new Texture(Gdx.files.internal("backgrounds/play_background1.png"))));
         outerWallSprite.setPosition(0,0);
 
+        // init game manager, hud, box2d world
         gameManager = new GameManager();
         gameManager.setGameMode(mode);
-
         hudStage = new HudStage(GAME, 60, mode);
-//        Gdx.input.setInputProcessor(hudStage);
         gameManager.setHudStage(hudStage);
         gameManager.setWorld(world);
-
         gameManager.generateWalls();
         gameManager.generateNewLevel();
 
-
-
+        // play background music
+        music = GAME.manager.get("audio/bensound-perception.mp3", Music.class);
+        music.setLooping(true);
+        music.setVolume(0.05f);
+        music.play();
     }
 
     @Override
@@ -89,7 +77,9 @@ public class GameScreen implements Screen {
     }
 
     public void update(float delta) {
-       pressed = false;
+
+        // arrow keys to move character
+/*       pressed = false;
 
 //        key press movement
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -113,25 +103,27 @@ public class GameScreen implements Screen {
            gameManager.getRandomRobot().getBody().setLinearVelocity(v_x, v_y);
 
         v_x = 0;
-        v_y= 0;
+        v_y= 0;*/
 
-        // detect mouse click
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 
-//            System.out.println(GAME.viewport.getScaling());
+//        System.out.println(justPressed);
+        // detect mouse click, isButtonJustPressed not working for html
+        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            if(!justPressed) {
 
-//            if(hudStage.hit(Gdx.input.getX(),Gdx.input.getY(), true).equals(hudStage.))
+                Vector2 pointClicked = hudStage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
-            Vector2 pointClicked = hudStage.screenToStageCoordinates(new Vector2(Gdx.input.getX(),Gdx.input.getY()));
+                gameManager.checkClick(pointClicked.x, pointClicked.y);
 
-//            gameManager.updateMagnetState(Gdx.input.getX(), Gdx.input.getY());
-            gameManager.updateMagnetClick(pointClicked.x, pointClicked.y);
-//                gameManager.checkClick(pointClicked.x, pointClicked.y);
-
-            if(hudStage.isExitButtonArea(pointClicked.x, pointClicked.y)) {
-                GAME.setScreen( new GameSummaryScreen(GAME, gameManager.getGameMode(), gameManager.getScore()));
+                if (hudStage.isExitButtonArea(pointClicked.x, pointClicked.y)) {
+                    music.stop();
+                    GAME.setScreen(new GameSummaryScreen(GAME, gameManager.getGameMode(), gameManager.getScore()));
+                }
             }
+            justPressed = true;
 
+        } else {
+            justPressed = false;
         }
 
         world.step(1/60f,1,1);
@@ -139,6 +131,7 @@ public class GameScreen implements Screen {
         gameManager.act(delta);
 
         if(gameManager.isCountdownDone()) {
+            music.stop();
             GAME.setScreen( new GameSummaryScreen(GAME, gameManager.getGameMode(), gameManager.getScore()));
         }
 
@@ -149,19 +142,11 @@ public class GameScreen implements Screen {
 
         update(delta);
 
-//        GAME.shapeRenderer.setProjectionMatrix(GAME.camera.combined);
-
         Gdx.gl.glClearColor(0f, 0f, 0f, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//        GAME.batch.setProjectionMatrix(GAME.camera.combined);
-
-
-
         // draw objects
         GAME.batch.begin();
-
-//        outerWallSprite.draw(GAME.batch);
 
         gameManager.draw(GAME.batch);
 
@@ -170,14 +155,14 @@ public class GameScreen implements Screen {
         GAME.batch.setProjectionMatrix(hudStage.getCamera().combined);
         hudStage.draw();
 
-        debugRenderer.render(world, GAME.camera.combined);
+        // box2d debugging lines
+//        debugRenderer.render(world, GAME.camera.combined);
 
 
     }
 
     @Override
     public void resize(int width, int height) {
-//        stage.getViewport().update(width, height, false);
         GAME.viewport.update(width, height, false);
         GAME.camera.update();
     }
@@ -201,7 +186,6 @@ public class GameScreen implements Screen {
     public void dispose() {
 
         world.dispose();
-//        stage.dispose();
         hudStage.dispose();
 
 

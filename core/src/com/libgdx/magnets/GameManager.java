@@ -1,6 +1,5 @@
 package com.libgdx.magnets;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -14,12 +13,13 @@ import com.libgdx.magnets.entities.Magnet;
 import com.libgdx.magnets.entities.Power;
 import com.libgdx.magnets.entities.Robot;
 import com.libgdx.magnets.entities.WallBody;
+import com.libgdx.magnets.utility.Constants;
+import com.libgdx.magnets.utility.Point;
 
-import java.awt.Point;
+//import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 public class GameManager {
 
@@ -72,22 +72,23 @@ public class GameManager {
     public void checkClick(float x, float y) {
 
         updateMagnetClick(x, y);
-        checkExitClick(x,y);
+//        checkExitClick(x,y);
 
     }
 
-    public void checkExitClick(float x,float y) {
+//    public void checkExitClick(float x,float y) {
+//
+//        if (hudStage.hit(x,y, true) == hudStage.getExitButton()) {
+//
+//        }
+//
+//    }
 
-        if (hudStage.hit(x,y, true) == hudStage.getExitButton()) {
-
-        }
-
-    }
-
+    // if a magnet is clicked, change its state
     public void updateMagnetClick(float x, float y) {
 
         Rectangle magnetRect;
-        System.out.println("update magnetic state: " + x + ", " + y);
+//        System.out.println("update magnetic state: " + x + ", " + y);
 
         for (Magnet magnet : magnetList) {
 
@@ -104,6 +105,7 @@ public class GameManager {
 
     }
 
+    // add walls around play area
     public void generateWalls() {
 
         int leftX = 1;
@@ -120,6 +122,7 @@ public class GameManager {
         WallBody.createWall(world, leftX, downY, leftX, upY);
     }
 
+    // create randomized level
     public void generateNewLevel() {
 
         this.resetEntities();
@@ -151,13 +154,13 @@ public class GameManager {
 
         for (Point point : pointList) {
             if (numMagnets > 0) {
-                addMagnet(new Magnet(world, point.x, point.y));
+                addMagnet(new Magnet(world, (int)point.x, (int)point.y));
                 numMagnets--;
             } else if (numPowers > 0) {
-                addPower(new Power(point.x - powerSize / 2, point.y - powerSize / 2));
+                addPower(new Power((int)(point.x - powerSize / 2), (int)(point.y - powerSize / 2)));
                 numPowers--;
             } else if (numRobots > 0) {
-                addRobot(new Robot(world, point.x, point.y));
+                addRobot(new Robot(world, (int)point.x, (int)point.y));
                 numRobots--;
             }
 
@@ -189,6 +192,7 @@ public class GameManager {
         return true;
     }
 
+    // erase board
     private void resetEntities() {
         for (Magnet magnet : magnetList)
             world.destroyBody(magnet.getBody());
@@ -286,6 +290,7 @@ public class GameManager {
 
     }
 
+    // change countdown each second that has passed
     private void updateCountdown(float delta) {
         timeCount += delta;
         if (timeCount >= 1) {
@@ -296,11 +301,13 @@ public class GameManager {
         }
     }
 
+    // change hud to reflect countdown status
     private void updateHudTime() {
         if (this.mode != Constants.GameMode.FREE_PLAY)
             hudStage.setTime(countdown);
     }
 
+    // if robot hit a power, remove it and increment the score
     private void updatePowerHit(Robot robot) {
 
         final Rectangle robotRect;
@@ -326,8 +333,8 @@ public class GameManager {
             return null;
     }
 
-    public void dispose() {
-        world.dispose();
-    }
+//    public void dispose() {
+//        world.dispose();
+//    }
 
 }
