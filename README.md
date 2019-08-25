@@ -1,6 +1,7 @@
 # Magnets
 ## LOWREZJAM 2019:
-This was a submission for LOZREZJAM 2019. Play/download at: https://jl1n.itch.io/magnets.
+LOZREZJAM 2019 submission page: https://itch.io/jam/lowrezjam-2019/rate/470009
+Play/download: https://jl1n.itch.io/magnets.
 
 ## Description:
 Click a magnet to change its state between attract, repel, and off. Getting the robot to an energy block increases the score.
