@@ -12,6 +12,6 @@ Music: "Perception" from Bensound.com
 ## Build Instructions:
 This game was built using the libGDX framework. Build with `gradlew desktop:dist`, `gradlew android:assembleRelease`, or `gradlew html:dist`.
 
-![Main Menu](https://github.com/jl1n/Magnets/blob/master/artifacts/current/MainMenu.png "Main Menu")
-![Gameplay](https://github.com/jl1n/Magnets/blob/master/artifacts/current/Gameplay.png "Gameplay")
-![Game Summary](https://github.com/jl1n/Magnets/blob/master/artifacts/current/GameSummary.png "Game Summary") 
+![Main Menu](https://github.com/jkailin/Magnets/blob/master/artifacts/current/MainMenu.png "Main Menu")
+![Gameplay](https://github.com/jkailin/Magnets/blob/master/artifacts/current/Gameplay.png "Gameplay")
+![Game Summary](https://github.com/jkailin/Magnets/blob/master/artifacts/current/GameSummary.png "Game Summary") 
